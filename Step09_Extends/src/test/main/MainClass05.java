@@ -12,6 +12,8 @@ import test.mypac.SmartPhone;
  *  
  *  2. 스마트폰의 사용설명서만 가지고 와서 현재 폰의 설명서라고 우기고 
  *     그냥 그폰을 쓰라고 한다.
+ *     
+ *  
  */
 public class MainClass05 {
 	public static void main(String[] args) {
