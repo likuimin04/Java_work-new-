@@ -25,7 +25,7 @@ public class MainClass03 {
 		Weapon w2=new AirPlane();
 		useWeapon(w2);
 	}
-	public void useWeapon(Weapon w) {
+	public static void useWeapon(Weapon w) {
 		w.perpare();
 		w.attack();
 	}
