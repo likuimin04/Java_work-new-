@@ -1,5 +1,6 @@
 package test.main;
 
+import test.mypac.Sniper;
 import test.mypac.Weapon;
 
 public class MainClass03 {
@@ -19,11 +20,15 @@ public class MainClass03 {
 			}
 			
 		}
+		// Sword 객체를 생성해서 참조값을 Weapon type 으로 받기 (lacal inner class방법)
 		Weapon w1=new Sword();
 		useWeapon(w1);
-		
+		// AirPlane 객체를 생성해서 참조값을 Weapon type 으로 받기 (inner class 방법)
 		Weapon w2=new AirPlane();
 		useWeapon(w2);
+		// Sniper 객체를 생성해서 참조값을 Weapon type 으로 받기 (external class 방법)
+		Weapon w3=new Sniper();
+		useWeapon(w3);
 	}
 	public static void useWeapon(Weapon w) {
 		w.perpare();
