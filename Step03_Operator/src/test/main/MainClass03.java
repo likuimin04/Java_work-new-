@@ -9,7 +9,7 @@ public class MainClass03 {
 		boolean result1=10==10;//true
 		boolean result2=10!=10;//false
 		boolean result3=10>100;//false
-		boolean result4=70>=60;//true
+		boolean result4=10>=10;//true
 		boolean result5=10<100;//true
 		boolean result6=10<=10;//true
 		

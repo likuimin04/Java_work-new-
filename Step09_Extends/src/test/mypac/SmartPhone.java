@@ -1,6 +1,10 @@
 package test.mypac;
 
-public class SmartPhone extends HandPhone{
+// SmartPhone 클래스를 종단 클래스로 만드는 final 예약어
+public final class SmartPhone extends HandPhone{
+	public SmartPhone() {
+		System.out.println("SmartPhone() 생성자 호출됨");
+	}
 	// 인터넷 하는 메소드
 	public void doInternet() {
 		System.out.println("인터넷을 해요");
@@ -9,7 +13,7 @@ public class SmartPhone extends HandPhone{
 	// 특별한 기능을 하는것은 아니고 단지 재정의한 메소드라고 표시해주는 기능
 	@Override
 	public void takePicture() {
-		// super 는 부모의 객체를 가리키느 예약어이다.
+		// super 는 부모의 객체를 가리키는 예약어이다.
 		// 피 오버라이드 된 부모 메소드도 만얄 호출하려면
 		// 아래와 같이 호출 하면 된다.
 		// super.takePicture();
