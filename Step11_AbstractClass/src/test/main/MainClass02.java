@@ -1,5 +1,6 @@
 package test.main;
 
+import test.mypac.Sniper;
 import test.mypac.Weapon;
 
 public class MainClass02 {
@@ -10,14 +11,9 @@ public class MainClass02 {
 		 * 아래의 useWeapon 매소드를 호출해 보세요.
 		 * (단, 클래스명은 MyWeapon 말고 다른걸로)
 		 */
-		public class Sniper extends Weapon{
-			@Override
-			public void attack() {
-				Sniper sp=new Sniper;
-				sp.perpare();
-				sp.attack();	
-			}
-		}
+		
+		Weapon sp=new Sniper();
+		MainClass02.useWeapon(sp);
 	}
 	public static void useWeapon(Weapon w) {
 		w.perpare();
