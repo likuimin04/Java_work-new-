@@ -15,9 +15,10 @@ public class MainClass05 {
 		 *  0 번째 친구 이름: 김구라
 		 *  1 번째 친구 이름: 해골
 		 *  2 번째 친구 이름: 원수이
-		 *  3.
-		 *  4.
+		 *  3...
+		 *  4...
 		 */
+		
 		List<String> mem=new ArrayList<>();
 		for(int i=0; i<5; i++) {
 			Scanner scan=new Scanner(System.in);
