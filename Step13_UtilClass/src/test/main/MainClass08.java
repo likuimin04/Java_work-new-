@@ -59,7 +59,7 @@ public class MainClass08 {
 			int num=(int)tmp.get("num");
 			String name=(String)tmp.get("name");
 			String addr=(String)tmp.get("addr");
-			System.out.println(tmp);
+			System.out.println("번호 : "+num+", 이름 : "+name+", 주소 : "+addr);
 		}
 	}
 }
