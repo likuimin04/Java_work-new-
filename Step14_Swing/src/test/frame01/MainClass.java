@@ -44,12 +44,15 @@ public class MainClass {
 		btn.addActionListener(listener);
 		
 		JFrame f1=new JFrame();
+		// 버튼 객체를 생성해서
 		JButton btn1=new JButton("메롱");
+		// 위치와 크기를 설정하고
 		btn1.setBounds(200, 50, 100, 40);
+		// 프레임에 추가 하기
 		f.add(btn1);
 		f.setVisible(true);
 		
-		ActionListener listener2=new ActionListener() {
+		/*ActionListener listener2=new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -57,5 +60,11 @@ public class MainClass {
 			}
 		};
 		btn1.addActionListener(listener2);
+		*/
+		
+		// 위 내용을 이렇게 축소 할 수 있다
+		btn1.addActionListener((e)->{
+			JOptionPane.showMessageDialog(f1, "약올리지마!");
+		});
 	}
 }
