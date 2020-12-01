@@ -10,25 +10,7 @@ import javax.swing.JOptionPane;
 
 import test.mypac.MyFrame;
 
-public class MainFrame04 extends JFrame {
-	// 필드에 AtionListener
-	ActionListener listener=new ActionListener() {
-		// 인자로 전달되는 ActionEvent 객체에는 눌러진 버튼의 정보가 들어있다
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// 이벤트가 일어난 UI (Button) 의 ActionCommand 값을 읽어 온다.
-			String command=e.getActionCommand();
-			// 문자열(String) 의 내용을 비교 할때는 == 를 사용하지 말고
-			// .equals() 메소드를 이용해야한다.
-			if(command.equals("send")) {
-				JOptionPane.showMessageDialog(MainFrame04.this, "전송합니다.");
-			}else if(command.equals("update")) {
-				JOptionPane.showMessageDialog(MainFrame04.this, "수정합니다.");
-			}else if(command.equals("delete")) {
-				JOptionPane.showMessageDialog(MainFrame04.this, "삭제합니다.");
-			}
-		}
-	};
+public class MainFrame04 extends JFrame implements ActionListener{
 
 	public MainFrame04(String title) {
 		super(title); // 부모 생성자에 전달하기
@@ -43,6 +25,9 @@ public class MainFrame04 extends JFrame {
 		add(sendBtn);
 		add(updateBtn);
 		add(deleteBtn);
+		// 버튼 리스너 등록하기
+		sendBtn.add
+		
 		// 버튼에 ActionCommand 를 원하는대로 지정 할 수있다 [지정하는 이유는 어떤 버튼을 사용할지 지정하기 위함이다]
 		sendBtn.setActionCommand("send");
 		updateBtn.setActionCommand("update");
@@ -58,5 +43,21 @@ public class MainFrame04 extends JFrame {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// 화면상에 실제 보이게 한다.
 		f.setVisible(true);
+	}
+
+	// MainFrame4가 implements ActionListener 했으므로 강제 구현된 메소드
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// 이벤트가 일어난 UI (Button) 의 ActionCommand 값을 읽어 온다.
+				String command=e.getActionCommand();
+				// 문자열(String) 의 내용을 비교 할때는 == 를 사용하지 말고
+				// .equals() 메소드를 이용해야한다.
+				if(command.equals("send")) {
+					JOptionPane.showMessageDialog(MainFrame04.this, "전송합니다.");
+				}else if(command.equals("update")) {
+					JOptionPane.showMessageDialog(MainFrame04.this, "수정합니다.");
+				}else if(command.equals("delete")) {
+					JOptionPane.showMessageDialog(MainFrame04.this, "삭제합니다.");
+				}
 	}
 }

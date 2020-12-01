@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 import test.mypac.MyFrame;
 
-public class MainFrame03 extends JFrame {
+public class MainFrame03 extends JFrame{
 	// 필드에 AtionListener
 	ActionListener listener=new ActionListener() {
 		// 인자로 전달되는 ActionEvent 객체에는 눌러진 버튼의 정보가 들어있다
