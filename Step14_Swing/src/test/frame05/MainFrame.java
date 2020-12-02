@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -57,20 +58,32 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		//눌러진 버튼의 액션 command 를 읽어와서 
-		String command=e.getActionCommand();
-		//if 문으로 분기 한다.
-		if(command.equals("plus")) {
-			
-		}else if(command.equals("minus")) {
-			
-		}else if(command.equals("multiple")) {
-			
-		}else if(command.equals("division")) {
-			
-		}
-	}
+	   public void actionPerformed(ActionEvent e) {
+	      try {
+	         // 입력한 숫자문자열을 실제 산술연산 가능한 숫자로 바꾸기
+	         double num1=Double.parseDouble(inputNum1.getText());
+	         double num2=Double.parseDouble(inputNum2.getText());
+	         // 연산의 결과값을 저장할 변수를 만들고 0으로 초기화
+	         double result=0;
+	         // 눌러진 버튼의 액션 command 를 읽어와서
+	         String command=e.getActionCommand();
+	         // if 문으로 분기한다.
+	         if(command.equals("plus")) {
+	            result=num1+num2;
+	         }else if(command.equals("minus")) {
+	            result=num1-num2;
+	         }else if(command.equals("multiple")) {
+	            result=num1*num2;
+	         }else if(command.equals("division")) {
+	            result=num1/num2;
+	         }
+	         // 결과값을 JLabel 에 출력하기 ( 숫자를 문자열로 변경 후 출력 )
+	         String strNum=Double.toString(result);
+	         label_result.setText(Double.toString(result));
+	      }catch(NumberFormatException e1) {
+	         JOptionPane.showMessageDialog(this, "숫자 형식에 맞게 입력해주세요");
+	      }
+	   }
 	
 	public static void main(String[] args) {
 		MainFrame f=new MainFrame("계산기");
