@@ -41,7 +41,7 @@ public class MainFrame extends JFrame implements ActionListener{
       // 컴퓨터의 패로 사용할 값 0~2 중에 하나의 숫자를 랜덤하게 얻어내기
       int ranNum=ran.nextInt(3);
       // "가위", "바위","보" 문자열
-      String com=usergame.
+      String com=usergame[ranNum];
       lab2.setText("Computer: "+usergame[ranNum]);
       // 플레이어가 선택한 패 읽어오기
       String user=combo.getSelectedItem().toString();
