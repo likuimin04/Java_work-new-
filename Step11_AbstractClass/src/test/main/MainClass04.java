@@ -4,6 +4,11 @@ import test.mypac.Weapon;
 
 public class MainClass04 {
 	public static void main(String[] args) {
+		/*
+		 * Weapon 추상클래스를 상속 받은 익명의 local inner 클래스를 이용해서
+		 * Weapon type 의 참조값을 얻어내ㅓ w1 이라는 Weapon type 의
+		 * 지역 변수에 담기
+		 */
 		Weapon w1=new Weapon() {
 			@Override
 			public void attack() {
