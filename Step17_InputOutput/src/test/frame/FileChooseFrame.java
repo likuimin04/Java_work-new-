@@ -19,6 +19,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class FileChooseFrame extends JFrame implements ActionListener{
 	//필요한 필드정의하기 (모든 메소드에서 접근 가능한 자원)
 	JButton selectBtn, selectBtn2;
+	JTextArea area;
+	
 	//생성자
 	public FileChooseFrame(String title) {
 		super(title);
@@ -33,7 +35,7 @@ public class FileChooseFrame extends JFrame implements ActionListener{
 		selectBtn2.addActionListener(this);
 		
 		//JTextArea 객체 생성
-		JTextArea area=new JTextArea();
+		area=new JTextArea();
 		add(area, BorderLayout.CENTER);
 		area.setBackground(Color.YELLOW);
 		
@@ -96,8 +98,7 @@ public class FileChooseFrame extends JFrame implements ActionListener{
 					//읽어들인 문자열 콘솔창에 출력
 					//System.out.println(line);
 					//읽어들인 문자열을 JTextArea 에 출력해 보시렵니까?
-					
-					// **여기 추가 해야함. 선생님 커밋 한거에서**
+					area.append(line+"\r\n");
 				}
 			}catch(Exception ex) {
 				ex.printStackTrace();
