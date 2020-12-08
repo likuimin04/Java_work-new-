@@ -40,6 +40,11 @@ public class MainClass03 {
 				if(pstmt!=null)pstmt.close();
 				if(conn!=null)conn.close();
 			}catch(Exception e) {}
+			if(flag>0) {
+				System.out.println("작업(INSERT) 성공");
+			}else {
+				System.out.println("작업(INERT) 실패");
+			}
 		}
 	}
 }
