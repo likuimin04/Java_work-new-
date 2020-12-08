@@ -31,8 +31,8 @@ public class MainClass01 {
             e.printStackTrace();
         }
 
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        PreparedStatement pstmt = null;  // try문 밖에다가도 적용하기 위함이다
+        ResultSet rs = null;             // try문 밖에다가도 적용하기 위함이다
         try {
             String sql = "SELECT num, name, addr FROM member ORDER BY num ASC";
            // sql 문을 대신 실행해주는 PreparedStatement 객체의 참조값 얻어오기
