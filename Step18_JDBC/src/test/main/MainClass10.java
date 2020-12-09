@@ -1,7 +1,7 @@
 package test.main;
 
+import test.member.dao.MemberDao;
 import test.member.dto.MemberDto;
-import test.memberdao.MemberDao;
 
 public class MainClass10 {
 	public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package test.memberdao;
+package test.member.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

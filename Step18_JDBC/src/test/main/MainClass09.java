@@ -1,6 +1,6 @@
 package test.main;
 
-import test.memberdao.MemberDao;
+import test.member.dao.MemberDao;
 
 public class MainClass09 {
 	public static void main(String[] args) {
