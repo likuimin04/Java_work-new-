@@ -5,6 +5,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -57,13 +60,27 @@ public class ChattingFrame extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// 1. JTextField 에 입력한 문자열을 읽어와서
-		
-		// 2. Socket 접속을 해서 전송한다.
-		
-		//3. JTextField 에 입력한 문자열 삭제
-		
+		//1. JTextField 에 입력한 문자열을 읽어와서
+				String msg=input.getText();
+				//2. Socket 접속을 해서 전송한다.
+				Socket socket=null;
+				try {
+					// new Socket("접속할 ip 주소", 포트번호)
+					socket=new Socket("14.63.164.99", 5000);
+					System.out.println("서버에 Socket 접속 성공!");
+					//2. Socket 을 통해서 출력하기 
+					OutputStream os=socket.getOutputStream();
+					OutputStreamWriter osw=new OutputStreamWriter(os);
+					osw.write(msg); //입력한 문자열 출력 
+					osw.write("\r\n"); //개행기호 출력
+					osw.flush(); //방출
+					osw.close(); //닫아주기
+					socket.close();
+				}catch(Exception e1) {
+					e1.printStackTrace();
+				}		
+				//3. JTextField 에 입력한 문자열 삭제
+				input.setText("");
 	}
-
 }
 
