@@ -17,7 +17,7 @@ public class ServerMain {
 			 */
 			while(true) {
 				System.out.println("클라이언트의 Socket 접속을 기다립니다...");
-				Socket socket=serverSocket.accept();
+				Socket socket=serverSocket.accept();  // 버튼을 누를때마다 새로은 socket 객체가 리턴 되는것이다.
 				System.out.println("클라이언트가 접속을 했습니다.");
 				String ip=socket.getInetAddress().getHostAddress();
 				System.out.println("접속한 클라이언트의 ip 주소:"+ip);
