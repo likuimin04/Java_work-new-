@@ -91,9 +91,17 @@ public class ServerMain {
 				}
 			}catch(Exception e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					socket.close();
+				}catch(IOException e) {
+					e.printStackTrace();
+				}
 			}
-		}
-	}
+			// 현제 스레드를 목록에서 제거하기
+			threadList.remove(this);
+		}  //run()
+	} //class ServerThread
 }
 
 
