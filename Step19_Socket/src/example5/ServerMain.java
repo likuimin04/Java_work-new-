@@ -49,6 +49,12 @@ public class ServerMain {
 		public void run() {
 			try {
 				//클라이언트가 전송하는 문자열을 읽어들일 객체 
+				/*
+				 * InputStream is=socket.getInputStream();
+				 * InputStreamReader isr= new InputStreamReader(is);
+				 * BufferedReader br= new BufferedReader(isr);
+				 */
+				// 윗 코딩을 한줄로 요약 한 코딩
 				BufferedReader br=
 					new BufferedReader(
 							new InputStreamReader(socket.getInputStream()));
