@@ -83,7 +83,7 @@ public class ClientFrame extends JFrame
 		//대화명을 입력 받아서 필드에 저장하기
 		chatName=JOptionPane.showInputDialog(this, "대화명을 입력하세요.");
 		if(chatName == null || chatName.equals("")) {
-			chatName="바보";
+			chatName="코딩빌런";
 		}
 		try {
 			//소켓객체 
