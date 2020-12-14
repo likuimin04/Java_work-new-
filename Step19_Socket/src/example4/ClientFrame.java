@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -12,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import org.xml.sax.InputSource;
 
 public class ClientFrame extends JFrame implements ActionListener{
 	JTextField tf;
@@ -61,12 +66,20 @@ public class ClientFrame extends JFrame implements ActionListener{
 			osw.write(msg); //입력한 문자열 출력 
 			osw.write("\r\n"); //개행기호 출력
 			osw.flush(); //방출
-			osw.close(); //닫아주기
+			
+			// 3. Socket 을 통해서 입력 받기
+			InputStream is=socket.getInputStream();
+			InputStreamReader isr=new InputStreamReader(is);
+			BufferedReader br=new BufferedReader(isr);
+			// 서버가 전송한 문자열 읽어들이기
+			String line=br.readLine();
+			System.out.println(line);
+			
 			socket.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}		
-		//3. JTextField 에 입력한 문자열 삭제
+		//4. JTextField 에 입력한 문자열 삭제
 		tf.setText("");
 	}
 }
