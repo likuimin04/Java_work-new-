@@ -20,6 +20,7 @@ public class ServerMain {
 	static List<ServerThread> threadList;
 	
 	public static void main(String[] args) {
+		//ArrayList 객체 생성해서 필드에 저장하기
 		threadList=new ArrayList<>();
 		
 		ServerSocket serverSocket=null;
@@ -49,8 +50,9 @@ public class ServerMain {
 	//스레드 클래스 설계
 	static class ServerThread extends Thread{
 		//필드 (클라이언트와 연결된 Socket 객체의 참조값을 저장할 필드)
-		private Socket socket; 
-		private BufferedWriter bw;
+		private Socket socket;
+		//클라이언트에게 문자열을 출력할 객체의 참조값을 저장할 필드
+		private BufferedWriter bw; 
 		//스레드가 응대하는 클라이언트의 대화명을 저장할 필드
 		private String chatName;
 		
@@ -59,19 +61,15 @@ public class ServerMain {
 			//생성자의 인자로 전달받은 Socket 객체의 참조값을 필드에 저장하기 
 			this.socket=socket;
 		}
-		
-		//인자로 전달되는 문자열을 Socket 객체를 통해서 출력하는 메소드
+		//인자로 전달되는 문자열을 Socket 객체를 통해서 출력하는 메소드 
 		public void sendMessage(String msg) throws IOException {
-			//인자로 전달된 문자열을 필드에 저장된 BufferedWriter 객체의 참조값을 이용하여
-			// 클라이언트에게 출력하기
-			
-			//반복문 돌면서 모든 스레드 객체의 참조값을 하나씩 불러내서
+			//반복문 돌면서 모든 스레드 객체의 참조값을 하나씩 불러내서 
 			for(ServerThread tmp:threadList) {
 				//스레드 객체의 필드 bw(BufferedWriter) 를 이용해서 문자열을 출력한다.
 				tmp.bw.write(msg);
 				tmp.bw.newLine();
 				tmp.bw.flush();
-			}
+			}	
 		}
 		//참여자 목록을 구성해서 모든 클라이언트에게 출력해주는 메소드
 		public void sendChatNameList() {
@@ -81,15 +79,13 @@ public class ServerMain {
 			for(ServerThread tmp:threadList) {
 				jsonArr.put(tmp.chatName);
 			}
-			//JSONObject 에 필요한 정보를 담는다,
+			//JSONObject 에 필요한 정보를 담는다.
 			jsonObj.put("type", "members");
 			jsonObj.put("list", jsonArr);
 			
-			//JSONObject 의 내용을 JSON 문자열로 바꿔서 전송한다.
 			try {
 				sendMessage(jsonObj.toString());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -98,12 +94,6 @@ public class ServerMain {
 		public void run() {
 			try {
 				//클라이언트가 전송하는 문자열을 읽어들일 객체 
-				/*
-				 * InputStream is=socket.getInputStream();
-				 * InputStreamReader isr= new InputStreamReader(is);
-				 * BufferedReader br= new BufferedReader(isr);
-				 */
-				// 윗 코딩을 한줄로 요약 한 코딩
 				BufferedReader br=
 					new BufferedReader(
 							new InputStreamReader(socket.getInputStream()));
@@ -113,16 +103,21 @@ public class ServerMain {
 				//반복문 돌면서 클라이언트가 전송하는 문자열이 있는지 읽어와 본다.
 				while(true) {
 					//문자열 한줄이 전송될때 까지 블록킹 되는 메소드 
-					String line=br.readLine();  //클라이언트가 전송한 문자열을 읽어와서
-					// 누군가(현재 스레드가 응대하는 클라이언트) 입장한 거라면
+					String line=br.readLine(); //클라이언트가 전송한 문자열을 읽어와서
+					//누군가(현재 스레드가 응대하는 클라이언트) 입장한 거라면 
 					JSONObject jsonObj=new JSONObject(line);
 					String type=jsonObj.getString("type");
 					if(type.equals("enter")) {
 						//대화명을 필드에 저장한다.
 						chatName=jsonObj.getString("name");
 						//모든 클라이언트에게 대화명 목록을 보내준다.
-						
+						sendChatNameList();
 					}
+					//클라이언트의 접속이 끈기면 
+					if(line==null) {
+						break; //반복문  while 을 탈출하도록 한다. 
+					}
+					
 					//서버가 특정 클라이언트에게 받은 문자열을 모든 클라이언트에게 보낸다.
 					sendMessage(line);
 				}
@@ -130,17 +125,25 @@ public class ServerMain {
 				e.printStackTrace();
 			}finally {
 				try {
+					//현재 스레드를 목록에서 제거하기 
+					threadList.remove(this);
+					//누가 퇴장하는지 정보를 보낸다.
+					JSONObject jsonObj=new JSONObject();
+					jsonObj.put("type", "out");
+					jsonObj.put("name", this.chatName);
+					sendMessage(jsonObj.toString());
+					//참여자 목록 업데이트 
+					sendChatNameList();
+					//socket 을 닫아준다.
 					socket.close();
-				}catch(IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			// 현제 스레드를 목록에서 제거하기
-			threadList.remove(this);
-		}  //run()
-	} //class ServerThread
-}
-
+		}//run()
+		
+	}//class ServerThread
+}//class ServarMain
 
 
 

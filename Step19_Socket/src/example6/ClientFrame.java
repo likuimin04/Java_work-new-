@@ -9,9 +9,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Vector;
@@ -25,21 +23,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 /*
  *  - 대화방에 현재 누가 참여하고 있는지 목록 출력하기
  *  - 누가 새로 입장했는지 메세지 출력하기
  *  - 누가 퇴장 했는지 메세지 출력하기
  *  
- *  메세지의 종류
+ *  서버에 전달되는 메세지의 종류
+ *  
  *  1. 일반 대화 메세지
- *  	{"type":"msg","name":"김구라","content":"안녕하세요!"}
+ *     {"type":"msg", "name":"김구라", "content":"안녕하세요!"}
  *  2. 누군가 입장했다는 메세지
- *  	{"type":"enter","name":"해골"}
+ *     {"type":"enter", "name":"해골"}
  *  3. 누군가 퇴장했다는 메세지
- *  	{"type":"out","name":"원숭이"}
+ *     {"type":"out", "name":"원숭이"}
  *  4. 참여자 목록 메세지
- *  	{"type":"members","list":["주뎅이","덩어리","개다리"]}
+ *     {"type":"members", "list":["주뎅이","덩어리","개다리"]}
+ * 
  */
 public class ClientFrame extends JFrame 
 		implements ActionListener, KeyListener{
@@ -50,6 +51,7 @@ public class ClientFrame extends JFrame
 	BufferedReader br;
 	JTextArea ta;
 	String chatName; //대화명을 저장할 필드 
+	JList<String> jList;
 	
 	//생성자
 	public ClientFrame(String title) {
@@ -58,11 +60,11 @@ public class ClientFrame extends JFrame
 		
 		//페널을 만들어서 프레임의 위쪽에 배치하기 
 		JPanel topPanel=new JPanel();
-		topPanel.setBackground(Color.GRAY);
+		topPanel.setBackground(Color.YELLOW);
 		add(topPanel, BorderLayout.SOUTH);
 		
 		//프레임에 UI 배치하기
-		tf=new JTextField(30);
+		tf=new JTextField(10);
 		JButton sendBtn=new JButton("Send");
 		topPanel.add(tf);
 		topPanel.add(sendBtn);
@@ -82,19 +84,19 @@ public class ClientFrame extends JFrame
 		tf.addKeyListener(this);
 		
 		//참여자 목록을 출력할 준비
-		JList<String> JList=new JList<>();
-		JList.setBackground(Color.ORANGE);
+		jList=new JList<>();
+		jList.setBackground(Color.GREEN);
 		
 		JPanel rightPanel=new JPanel();
-		rightPanel.add(JList);
-		add(rightPanel,BorderLayout.EAST);
+		rightPanel.add(jList);
+		add(rightPanel, BorderLayout.EAST);
 		
 		Vector<String> enterList=new Vector<>();
 		enterList.add("참여자 목록");
 		enterList.add("김구라");
 		enterList.add("해골");
 		
-		JList.setListData(enterList);
+		jList.setListData(enterList);
 		
 		//소켓 접속하기 
 		connect();
@@ -116,7 +118,7 @@ public class ClientFrame extends JFrame
 		//대화명을 입력 받아서 필드에 저장하기
 		chatName=JOptionPane.showInputDialog(this, "대화명을 입력하세요.");
 		if(chatName == null || chatName.equals("")) {
-			chatName="무명";
+			chatName="null";
 		}
 		try {
 			//소켓객체 
@@ -130,13 +132,13 @@ public class ClientFrame extends JFrame
 			//새로운 스레드를 시작 시켜서 서버에서 문자열이 도착하는지 지속적으로 대기한다.
 			new ClientThread().start();
 			//내가 입장한다고 서버에 메세지를 보낸다.
-			//JSONObject 에 정보를 담고
+			//JSONObject 에 정보를 담고 
 			JSONObject jsonObj=new JSONObject();
 			jsonObj.put("type", "enter");
 			jsonObj.put("name", chatName);
-			//JSONObject 에 담긴 정보를 JSON 문자열로 만들어서
+			//JSONObject 에 담긴정보를 JSON 문자열로 만들어서 
 			String msg=jsonObj.toString();
-			//서버에 출력하기
+			//서버에 출력하기 
 			bw.write(msg);
 			bw.newLine();
 			bw.flush();
@@ -158,21 +160,43 @@ public class ClientFrame extends JFrame
 				try {
 					//대기하다가 문자열이 도착하면 메소드가 리턴한다.
 					String line=br.readLine();
-					// JSON 문자열을 이용해서 JSONObject 객체를 생성한다.
+					//JSON 문자열을 이용해서 JSONObject 객체를 생성한다.
 					JSONObject jsonObj=new JSONObject(line);
-					// 어떤 종류의 메세지 인지 읽어와본다.
+					// 어떤 종류의 메세지 인지 읽어와 본다.
 					String type=jsonObj.getString("type");
 					if(type.equals("enter")) {
 						String name=jsonObj.getString("name");
-						ta.append("["+name+"]님께서 입장하였습니다.");
+						ta.append("[ "+name+" ] 님이 입장했습니다.");
 						ta.append("\r\n");
 					}else if(type.equals("msg")) {
 						String name=jsonObj.getString("name");
 						String content=jsonObj.getString("content");
-						ta.append(name+":"+content);
-						ta.append("/r/n");
+						ta.append(name+" : "+content);
+						ta.append("\r\n");
+					}else if(type.equals("members")) {
+						// "list" 라는 키값으로 저장된 JSONArray 객체 얻어오기 
+						JSONArray jsonArr=jsonObj.getJSONArray("list");
+						//참여자 목록을 저장할 Vector
+						Vector<String> list=new Vector<>();
+						//반복문 돌면서 
+						for(int i=0; i<jsonArr.length(); i++) {
+							// JSONArray 에서 i 번째 참여자 명단을 얻어와서 
+							String tmp=jsonArr.getString(i);
+							// Vector 에 누적 시키기
+							list.add(tmp);
+						}
+						//반복문 돌고 난후 참여자 목록 Vector 를 JList 에 연결하기
+						jList.setListData(list);
+					}else if(type.equals("out")) {
+						String name=jsonObj.getString("name");
+						ta.append("# "+name+" # 님이 퇴장 했습니다.");
+						ta.append("\r\n");
 					}
-		
+					
+					if(line==null) { //서버와의 접속이 끈기면 
+						break;// while 문 탈출
+					}
+					
 					//출력할 문서의 높이
 					int height=ta.getDocument().getLength();
 					//높이 만큼 JTextArea 를 스크롤시켜서 가장 아래에 있는 문자열이 보이게
@@ -202,7 +226,8 @@ public class ClientFrame extends JFrame
 		// TODO Auto-generated method stub
 		
 	}
-	// 메세지를 전송하는 메소드
+	
+	//메세지를 전송하는 메소드
 	public void sendMessage() {
 		//전송할 문자열
 		String msg=tf.getText();
@@ -221,3 +246,36 @@ public class ClientFrame extends JFrame
 		tf.setText("");
 	}
 }// class ClientFrame
+
+
+
+/*
+ * 
+ *    JSON  vs  XML
+ *    
+ *    {"num":1, "name":"김구라", "addr":"노량진}
+ *    
+ *    vs
+ *    
+ *    <member>
+ *    	<num>1</num>
+ *    	<name>김구라</name>
+ *    	<addr>노량진</addr>
+ *    </member>
+ *    
+ *    ---------------------------------------
+ *    
+ *    {"num":1, "friends":["김구라","해골","원숭이"]}
+ *    
+ *    vs
+ *    
+ *    <info>
+ *    	<num>1</num>
+ *    	<friends>
+ *    		<item>김구라</item>
+ *    		<item>해골</item>
+ *    		<item>원숭이</item>
+ *    	</friends>
+ *    </info>
+ */
+
